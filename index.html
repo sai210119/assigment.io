@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registration Form</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+      color: #212529;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 60px auto;
+      background: #ffffff;
+      padding: 40px 50px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #0d6efd;
+      margin-bottom: 30px;
+    }
+
+    label {
+      font-weight: 500;
+      margin-bottom: 6px;
+      display: inline-block;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 15px;
+      transition: 0.2s ease-in-out;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #0d6efd;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+    }
+
+    button {
+      background-color: #0d6efd;
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      width: 100%;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #084cdf;
+    }
+
+    .success {
+      color: #198754;
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Registration Form</h2>
+    <form id="regForm" enctype="multipart/form-data">
+      <label for="name">Name</label>
+      <input type="text" name="name" placeholder="Your full name" required />
+
+      <label for="age">Age</label>
+      <input type="number" name="age" placeholder="Your age" required />
+
+      <label for="dob">Date of Birth</label>
+      <input type="date" name="dob" required />
+
+      <label for="gender">Gender</label>
+      <select name="gender" required>
+        <option value="" disabled selected>Select gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+
+      <label for="mobile">Mobile Number</label>
+      <input type="text" name="mobile" placeholder="10-digit mobile number" required />
+
+      <label for="email">Email</label>
+      <input type="email" name="email" placeholder="example@mail.com" required />
+
+      <label for="address">Address</label>
+      <textarea name="address" rows="3" placeholder="Your address"></textarea>
+
+      <label for="state">State</label>
+      <input type="text" name="state" placeholder="State" />
+
+      <label for="pincode">Pincode</label>
+      <input type="text" name="pincode" placeholder="6-digit pincode" required />
+
+      <label for="occupation">Occupation</label>
+      <input type="text" name="occupation" placeholder="Occupation" />
+
+      <label for="marital_status">Marital Status</label>
+      <select name="marital_status">
+        <option value="" disabled selected>Select status</option>
+        <option value="Single">Single</option>
+        <option value="Married">Married</option>
+      </select>
+
+      <label for="photo">Upload Photo</label>
+      <input type="file" name="photo" accept="image/*" required />
+
+      <button type="submit">Submit Registration</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('regForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const form = e.target;
+      const formData = new FormData(form);
+
+      try {
+        const res = await fetch('http://localhost:3000/api/register', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await res.json();
+
+        if (!res.ok) {
+          if (result.errors) {
+            alert(result.errors.map(err => err.msg).join('\n'));
+          } else {
+            alert('Submission failed.');
+          }
+        } else {
+          alert('✅ Registration successful!');
+          form.reset();
+        }
+      } catch (err) {
+        console.error(err);
+        alert('⚠️ Error: Could not connect to server.');
+      }
+    });
+  </script>
+</body>
+</html>
