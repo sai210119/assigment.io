@@ -1,15 +1,7 @@
 const mysql = require('mysql2');
-
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '', // Use your MySQL password if set
+  password: '',       // leave blank if you haven't set a password
   database: 'registration_db'
 });
-
-connection.connect((err) => {
-  if (err) throw err;
-  console.log('Connected to MySQL');
-});
-
-module.exports = connection;
