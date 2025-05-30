@@ -73,6 +73,9 @@
     .success {
       color: #198754;
       font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+      display: none;
     }
 
     @media (max-width: 600px) {
@@ -85,12 +88,17 @@
 <body>
   <div class="container">
     <h2>Registration Form</h2>
+
+    <div id="successMessage" class="success">
+      Registration successful!
+    </div>
+
     <form id="regForm" enctype="multipart/form-data">
       <label for="name">Name</label>
-      <input type="text" name="name" placeholder="Your full name" required />
+      <input type="text" name="name" required />
 
       <label for="age">Age</label>
-      <input type="number" name="age" placeholder="Your age" required />
+      <input type="number" name="age" required />
 
       <label for="dob">Date of Birth</label>
       <input type="date" name="dob" required />
@@ -103,22 +111,22 @@
       </select>
 
       <label for="mobile">Mobile Number</label>
-      <input type="text" name="mobile" placeholder="10-digit mobile number" required />
+      <input type="text" name="mobile" required />
 
       <label for="email">Email</label>
-      <input type="email" name="email" placeholder="example@mail.com" required />
+      <input type="email" name="email" required />
 
       <label for="address">Address</label>
-      <textarea name="address" rows="3" placeholder="Your address"></textarea>
+      <textarea name="address" rows="3"></textarea>
 
       <label for="state">State</label>
-      <input type="text" name="state" placeholder="State" />
+      <input type="text" name="state" />
 
       <label for="pincode">Pincode</label>
-      <input type="text" name="pincode" placeholder="6-digit pincode" required />
+      <input type="text" name="pincode" required />
 
       <label for="occupation">Occupation</label>
-      <input type="text" name="occupation" placeholder="Occupation" />
+      <input type="text" name="occupation" />
 
       <label for="marital_status">Marital Status</label>
       <select name="marital_status">
@@ -140,28 +148,28 @@
 
       const form = e.target;
       const formData = new FormData(form);
+      const message = document.getElementById("successMessage");
 
       try {
-        const res = await fetch('http://localhost:3000/api/register', {
+        await fetch('http://localhost:3000/api/register', {
           method: 'POST',
           body: formData
         });
 
-        const result = await res.json();
-
-        if (!res.ok) {
-          if (result.errors) {
-            alert(result.errors.map(err => err.msg).join('\n'));
-          } else {
-            alert('Submission failed.');
-          }
-        } else {
-          alert(' Registration successful!');
+        // Always show success message, ignore server response
+        message.style.display = "block";
+        setTimeout(() => {
+          message.style.display = "none";
           form.reset();
-        }
+        }, 4000);
       } catch (err) {
-        console.error(err);
-        alert(' Error: Could not connect to server.');
+        // Still show success even on error (as requested)
+        console.error('Submission error:', err);
+        message.style.display = "block";
+        setTimeout(() => {
+          message.style.display = "none";
+          form.reset();
+        }, 4000);
       }
     });
   </script>
