@@ -12,7 +12,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static('public'));
 
-// Set up multer for image upload
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, 'uploads/'),
   filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
@@ -22,8 +21,6 @@ const fileFilter = (req, file, cb) => {
   else cb(new Error('Only images allowed'), false);
 };
 const upload = multer({ storage, fileFilter });
-
-// POST /api/register
 app.post(
   '/api/register',
   upload.single('photo'),
@@ -62,8 +59,6 @@ app.post(
     });
   }
 );
-
-// Start server
 app.listen(3000, () => {
   console.log('🚀 Server running at http://localhost:3000');
 });
